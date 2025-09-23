@@ -1,0 +1,17 @@
+{
+  "files": {
+    "main.css": "/Save-The-Planet/static/css/main.7b9dec6d.css",
+    "main.js": "/Save-The-Planet/static/js/main.bd75f5e7.js",
+    "static/js/453.5e4304ae.chunk.js": "/Save-The-Planet/static/js/453.5e4304ae.chunk.js",
+    "static/media/background.png": "/Save-The-Planet/static/media/background.5c527e01f2c7da8f0544.png",
+    "static/media/asteroid.webp": "/Save-The-Planet/static/media/asteroid.afaf2a157f10b63c9ead.webp",
+    "index.html": "/Save-The-Planet/index.html",
+    "main.7b9dec6d.css.map": "/Save-The-Planet/static/css/main.7b9dec6d.css.map",
+    "main.bd75f5e7.js.map": "/Save-The-Planet/static/js/main.bd75f5e7.js.map",
+    "453.5e4304ae.chunk.js.map": "/Save-The-Planet/static/js/453.5e4304ae.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.7b9dec6d.css",
+    "static/js/main.bd75f5e7.js"
+  ]
+}
