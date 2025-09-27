@@ -1,9 +1,9 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 import styles from '../styles/maincomponent.module.css';
-import { ASTEROID_BACKGROUND_POSITION, ASTEROID_RADIUS, ASTEROID_SCREEN_PADDING, ASTEROID_SPAWN_INTERVAL, ASTEROID_SPEED_RANGE, ASTEROID_TYPES_BACKGROUND, BULLET_RADIUS, BULLET_SPEED, DESTROYED_ASTEROID_LIFETIME, EDGES, MAX_COLLISIONS_ALLOWED, PLANET_COLLISION_RADIUS, PLANET_RADIUS, ROCKET_RADIUS, WIN_DESTROY_COUNT } from '../constants/constants';
+import { ASTEROID_BACKGROUND_POSITION, ASTEROID_RADIUS, ASTEROID_SCREEN_PADDING, ASTEROID_SPAWN_INTERVAL, ASTEROID_SPEED_RANGE, ASTEROID_TYPES_BACKGROUND, BULLET_RADIUS, BULLET_SPEED, DESTROYED_ASTEROID_LIFETIME, EDGES, GAME_OUTCOMES, MAX_COLLISIONS_ALLOWED, PLANET_COLLISION_RADIUS, PLANET_RADIUS, ROCKET_RADIUS, WIN_DESTROY_COUNT } from '../constants/constants';
 import { getAngle, getCorrectedCoordinates } from '../utils/utils';
 
-export default function MainComponent() {
+export default function MainComponent({ handleGameOver, difficulty }) {
     const midPoint = useRef({ x: window.innerWidth / 2, y: window.innerHeight / 2 });
     const cursorPositionRef = useRef({ x: 0, y: 0 });
     const bulletsRef = useRef([]);
@@ -100,7 +100,7 @@ export default function MainComponent() {
     }
 
     const spawnAsteroids = (time) => {
-        if (!lastAsteroidSpawnTimeRef.current || (time - lastAsteroidSpawnTimeRef.current) > ASTEROID_SPAWN_INTERVAL) {
+        if (!lastAsteroidSpawnTimeRef.current || (time - lastAsteroidSpawnTimeRef.current) > ASTEROID_SPAWN_INTERVAL[difficulty]) {
             lastAsteroidSpawnTimeRef.current = time;
             let position = {
                 x: 0,
@@ -177,25 +177,25 @@ export default function MainComponent() {
     const checkCollision = () => {
         if (!asteroidsRef.current) return;
         // Check for collisions between bullets and asteroids
-        if(bulletsRef.current) {
-        bulletsRef.current = bulletsRef.current.filter((bullet) => {
-            let bulletDestroyed = false;
-            asteroidsRef.current = asteroidsRef.current.filter((asteroid, asteroidIndex) => {
-                if (isBulletHit(bullet, asteroid)) {
-                    destroyedAsteroidCountRef.current += 1;
-                    if (scoreElementRef.current) {
-                        scoreElementRef.current.style.width = `${Math.min(100, (destroyedAsteroidCountRef.current / WIN_DESTROY_COUNT) * 100)}%`;
+        if (bulletsRef.current) {
+            bulletsRef.current = bulletsRef.current.filter((bullet) => {
+                let bulletDestroyed = false;
+                asteroidsRef.current = asteroidsRef.current.filter((asteroid, asteroidIndex) => {
+                    if (isBulletHit(bullet, asteroid)) {
+                        destroyedAsteroidCountRef.current += 1;
+                        if (scoreElementRef.current) {
+                            scoreElementRef.current.style.width = `${Math.min(100, (destroyedAsteroidCountRef.current / WIN_DESTROY_COUNT) * 100)}%`;
+                        }
+                        bulletDestroyed = true;
+                        bullet.el.remove();
+                        onAsteroidHit(asteroid);
+                        return false;
                     }
-                    bulletDestroyed = true;
-                    bullet.el.remove();
-                    onAsteroidHit(asteroid);
-                    return false;
-                }
-                return true;
+                    return true;
+                });
+                return !bulletDestroyed;
             });
-            return !bulletDestroyed;
-        });
-    }
+        }
 
         // check for collisions between asteroids and planet or rocket
         asteroidsRef.current = asteroidsRef.current.filter((asteroid) => {
@@ -238,8 +238,17 @@ export default function MainComponent() {
         renderDestroyedAsteroids(now);
         spawnAsteroids(now);
         checkCollision();
-        if (destroyedAsteroidCountRef.current >= WIN_DESTROY_COUNT) {}
-        if(collisionCountRef.current >= MAX_COLLISIONS_ALLOWED) {
+        if (destroyedAsteroidCountRef.current >= WIN_DESTROY_COUNT) {
+            handleGameOver({
+                outcome: GAME_OUTCOMES.VICTORY,
+            })
+            return;
+        }
+        if (collisionCountRef.current >= MAX_COLLISIONS_ALLOWED) {
+            handleGameOver({
+                outcome: GAME_OUTCOMES.LOST,
+                score: destroyedAsteroidCountRef.current
+            })
             return;
         }
         animationFrameIdRef.current = requestAnimationFrame(animate);
@@ -265,7 +274,7 @@ export default function MainComponent() {
 
     return (
         <div ref={containerRef} className={styles.container} onMouseMove={handleMouseMove}>
-            <img className={styles.planet} src="/images/planet.webp" alt="planet" />
+            <img className={styles.planet} src={`${process.env.PUBLIC_URL}/images/planet.webp`} alt="planet" />
             <img className={styles.rocket} ref={rocketRef} src="/images/rocket.png" alt="rocket" />
             <div className={styles.gameState}>
                 <div className={styles.lifeLineContainer}>

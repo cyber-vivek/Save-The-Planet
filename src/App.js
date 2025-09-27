@@ -1,9 +1,9 @@
 import React from 'react';
-import MainComponent from './components/MainComponent';
+import { MainContainer } from './components/MainContainer';
 
 function App() {
   return (
-    <MainComponent/>
+    <MainContainer/>
   );
 }
 

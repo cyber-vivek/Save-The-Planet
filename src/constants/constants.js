@@ -4,9 +4,19 @@ export const ROCKET_RADIUS = 25;
 export const BULLET_RADIUS = 5;
 export const ASTEROID_RADIUS = 25;
 
+export const GAME_DIFFICULTY_LEVEL = {
+    EASY: 'easy',
+    MEDIUM: 'medium',
+    HARD: 'hard'
+}
+
 export const BULLET_SPEED = 500; // pixels per second
 
-export const ASTEROID_SPAWN_INTERVAL = 2000; // milliseconds
+export const ASTEROID_SPAWN_INTERVAL = {
+    [GAME_DIFFICULTY_LEVEL.EASY]: 2000,
+    [GAME_DIFFICULTY_LEVEL.MEDIUM]: 1500,
+    [GAME_DIFFICULTY_LEVEL.HARD]: 1000,
+}; // milliseconds
 export const DESTROYED_ASTEROID_LIFETIME = 200; // milliseconds
 
 export const EDGES = ['top', 'bottom', 'left', 'right'];
@@ -22,3 +32,14 @@ export const ASTEROID_SPEED_RANGE = [75, 100, 125, 150, 175, 200]; // pixels per
 export const MAX_COLLISIONS_ALLOWED = 5; // after this many collisions with planet, game over
 
 export const WIN_DESTROY_COUNT = 100;
+
+export const GAME_STATES = {
+    BEGIN: 'begin',
+    RUNNING: 'running',
+    END: 'end'
+}
+
+export const GAME_OUTCOMES = {
+    VICTORY: 'victory',
+    LOST: 'lost',
+}
