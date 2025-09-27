@@ -275,7 +275,7 @@ export default function MainComponent({ handleGameOver, difficulty }) {
     return (
         <div ref={containerRef} className={styles.container} onMouseMove={handleMouseMove}>
             <img className={styles.planet} src={`${process.env.PUBLIC_URL}/images/planet.webp`} alt="planet" />
-            <img className={styles.rocket} ref={rocketRef} src="/images/rocket.png" alt="rocket" />
+            <img className={styles.rocket} ref={rocketRef} src={`${process.env.PUBLIC_URL}/images/rocket.png`} alt="rocket" />
             <div className={styles.gameState}>
                 <div className={styles.lifeLineContainer}>
                     <div ref={healthElementRef} className={styles.lifeLine}></div>
